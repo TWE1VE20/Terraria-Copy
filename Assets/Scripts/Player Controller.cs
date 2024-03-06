@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
         }
 
         if ((moveDir.x < 0 || moveDir.x > 0) && (rigid.velocity.x > 0 || rigid.velocity.x < 0))
-            animator.SetFloat("XSpeed", maxAnimSpeed * (rigid.velocity.x / maxXSpeed));
+            animator.SetFloat("XSpeed", maxAnimSpeed * Mathf.Abs((rigid.velocity.x / maxXSpeed)));
         else
             animator.SetFloat("XSpeed", 0);
 
