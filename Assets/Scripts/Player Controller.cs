@@ -53,8 +53,6 @@ public class PlayerController : MonoBehaviour
 
         if ((moveDir.x < 0 || moveDir.x > 0) && (rigid.velocity.x > 0 || rigid.velocity.x < 0))
             animator.SetFloat("XSpeed", maxAnimSpeed * Mathf.Abs((rigid.velocity.x / maxXSpeed)));
-        else
-            animator.SetFloat("XSpeed", 0);
 
         // 추락시 속도 제한
         if (rigid.velocity.y < -maxYSpeed)

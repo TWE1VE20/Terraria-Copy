@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Idle2
+  m_Name: Hanged Lean
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,16 +21,7 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 1967274168, guid: 5a457896e7d302f4eb42c90ea260d288, type: 3}
-    attribute: m_Sprite
-    path: Body/RightArm
-    classID: 212
-    script: {fileID: 0}
-    flags: 2
-  - serializedVersion: 2
-    curve:
-    - time: 0
-      value: {fileID: 621162360, guid: d13e7c5dc6b367a439b52bb2f5761c38, type: 3}
+      value: {fileID: -1350293142, guid: d13e7c5dc6b367a439b52bb2f5761c38, type: 3}
     attribute: m_Sprite
     path: Body/RightArm/RightHand
     classID: 212
@@ -39,7 +30,16 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 1363756976, guid: 5a457896e7d302f4eb42c90ea260d288, type: 3}
+      value: {fileID: 1374452532, guid: 5a457896e7d302f4eb42c90ea260d288, type: 3}
+    attribute: m_Sprite
+    path: Body/RightArm
+    classID: 212
+    script: {fileID: 0}
+    flags: 2
+  - serializedVersion: 2
+    curve:
+    - time: 0
+      value: {fileID: -1901014143, guid: 5a457896e7d302f4eb42c90ea260d288, type: 3}
     attribute: m_Sprite
     path: Body/LeftArm
     classID: 212
@@ -48,7 +48,7 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 621162360, guid: d13e7c5dc6b367a439b52bb2f5761c38, type: 3}
+      value: {fileID: -1083015740, guid: d13e7c5dc6b367a439b52bb2f5761c38, type: 3}
     attribute: m_Sprite
     path: Body/LeftArm/LeftHand
     classID: 212
@@ -57,7 +57,7 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -1379495055, guid: 7ea8b27376639344e8ec47a27d5406e7, type: 3}
+      value: {fileID: -762395983, guid: 7ea8b27376639344e8ec47a27d5406e7, type: 3}
     attribute: m_Sprite
     path: Body/Cloths/RightShirt
     classID: 212
@@ -66,7 +66,7 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -766039425, guid: 7ea8b27376639344e8ec47a27d5406e7, type: 3}
+      value: {fileID: -31921600, guid: 7ea8b27376639344e8ec47a27d5406e7, type: 3}
     attribute: m_Sprite
     path: Body/Cloths/LeftShirt
     classID: 212
@@ -80,7 +80,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 837533647
+      path: 15442948
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -89,7 +89,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 15442948
+      path: 837533647
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -134,12 +134,12 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 1967274168, guid: 5a457896e7d302f4eb42c90ea260d288, type: 3}
-    - {fileID: 621162360, guid: d13e7c5dc6b367a439b52bb2f5761c38, type: 3}
-    - {fileID: 1363756976, guid: 5a457896e7d302f4eb42c90ea260d288, type: 3}
-    - {fileID: 621162360, guid: d13e7c5dc6b367a439b52bb2f5761c38, type: 3}
-    - {fileID: -1379495055, guid: 7ea8b27376639344e8ec47a27d5406e7, type: 3}
-    - {fileID: -766039425, guid: 7ea8b27376639344e8ec47a27d5406e7, type: 3}
+    - {fileID: -1350293142, guid: d13e7c5dc6b367a439b52bb2f5761c38, type: 3}
+    - {fileID: 1374452532, guid: 5a457896e7d302f4eb42c90ea260d288, type: 3}
+    - {fileID: -1901014143, guid: 5a457896e7d302f4eb42c90ea260d288, type: 3}
+    - {fileID: -1083015740, guid: d13e7c5dc6b367a439b52bb2f5761c38, type: 3}
+    - {fileID: -762395983, guid: 7ea8b27376639344e8ec47a27d5406e7, type: 3}
+    - {fileID: -31921600, guid: 7ea8b27376639344e8ec47a27d5406e7, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
