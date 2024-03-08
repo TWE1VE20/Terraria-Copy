@@ -1,6 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+[CreateAssetMenu(fileName = "TowerData", menuName = "Data/Item")]
+public class Item : ScriptableObject
+{
+    [Serializable]
+    public struct ItemInfo
+    { 
+        public int id;
+        public ItemType itemType;
+        public string itemName;
+        public Sprite itemImage;
+        public ActionType actionType;
+        public Vector2Int range = new Vector2Int(5, 4);
+    }
+}
 
 public enum ItemType
 {
@@ -10,17 +26,12 @@ public enum ItemType
     Block,
     Wall,
     Potion,
+    None,
 }
 
-[System.Serializable]
-public class Item
+public enum ActionType
 {
-    public ItemType itemType;
-    public string itemName;
-    public Sprite itemImage;
-
-    public bool Use()
-    {
-        return false;
-    }
+    Mine,
+    Wall,
+    Attack,
 }
