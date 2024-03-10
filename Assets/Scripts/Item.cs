@@ -1,21 +1,21 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [CreateAssetMenu(fileName = "TowerData", menuName = "Data/Item")]
 public class Item : ScriptableObject
 {
-    [Serializable]
-    public struct ItemInfo
-    { 
-        public int id;
-        public ItemType itemType;
-        public string itemName;
-        public Sprite itemImage;
-        public ActionType actionType;
-        public Vector2Int range = new Vector2Int(5, 4);
-    }
+    [Header("Only gameplay")]
+    public int id;
+    public TileBase tile;
+    public ItemType type;
+    public ActionType actionType;
+    public Vector2Int range = new Vector2Int(5, 4);
+
+    [Header("Only UI")]
+    public bool stackable = true;
+
+    [Header("Both")]
+    public Sprite image;
 }
 
 public enum ItemType
