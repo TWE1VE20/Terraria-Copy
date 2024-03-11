@@ -6,6 +6,7 @@ public class Item : ScriptableObject
 {
     [Header("Only gameplay")]
     public int id;
+    public string itemName;
     public TileBase tile;
     public ItemType type;
     public ActionType actionType;
@@ -20,18 +21,22 @@ public class Item : ScriptableObject
 
 public enum ItemType
 {
+    None,
     Equipment,
     Tool,
     Weapon,
     Block,
     Wall,
     Potion,
-    None,
+    Torch,
 }
 
 public enum ActionType
 {
+    None,
     Mine,
-    Wall,
-    Attack,
+    CutDown,
+    WallCrush,
+    Broadsword,
+    Shortsword,
 }
