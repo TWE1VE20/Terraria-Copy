@@ -2463,7 +2463,7 @@ GameObject:
   - component: {fileID: 398158784}
   - component: {fileID: 398158785}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: AcquireCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14690,7 +14690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ffabb6f264f39248b0623d2a249db9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: a12a1c64a5907f24f8b1c413a4681d8b, type: 2}
+  item: {fileID: 11400000, guid: 3ea1032659cad724e8774280c16ba50e, type: 2}
   imange: {fileID: 1491647625}
 --- !u!1 &1505569085
 GameObject:
@@ -14840,6 +14840,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 558ab72fbbf7e0b48b4e42bd4a088c67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  range: 5
   item: {fileID: 11400000, guid: 26a2c96e2e885124f960f6d37545da6f, type: 2}
   layermask:
     serializedVersion: 2

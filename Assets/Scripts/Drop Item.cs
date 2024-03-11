@@ -6,8 +6,9 @@ using UnityEngine.UI;
 
 public class DropItem : MonoBehaviour
 {
-    public Item item;
-    public LayerMask layermask;
+    [SerializeField] float range;
+    [SerializeField] public Item item;
+    [SerializeField] public LayerMask layermask;
 
     public void Start()
     {
@@ -21,5 +22,11 @@ public class DropItem : MonoBehaviour
         {
             Debug.Log("Take");
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, range);
     }
 }
