@@ -8,7 +8,10 @@ public class Inventory : MonoBehaviour
 {
     public GameObject FullInventoryPanel;
     public GameObject ShrinkInventoryPanel;
+
+    [Header("Inventory Managemant")]
     public Item[] hotBar;
+    public int[] numberOfItem;
     public Item[] inventorySlot;
 
     [Header("Main Slots")]
@@ -49,7 +52,6 @@ public class Inventory : MonoBehaviour
         if (!activeInventory)
         {
             Vector2 scroll = value.Get<Vector2>();
-            Debug.Log(scroll.y);
             current = Mathf.Abs(((int)scroll.y / 120) + current + 10) % 10;
         }
     }

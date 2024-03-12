@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,8 @@ public class HotbarSlot : MonoBehaviour
     public GameObject MouseSlot;
     public int slotnum;
     public Inventory mainSlot;
+    public int numberofItem;
+    public GameObject numpad;
 
     [Header("UI")]
     public GameObject slot;
@@ -18,6 +21,7 @@ public class HotbarSlot : MonoBehaviour
     private void Start()
     {
         item = mainSlot.hotBar[slotnum];
+        numberofItem = mainSlot.numberOfItem[slotnum];
         InitialiseItem(item);
     }
 
@@ -33,15 +37,37 @@ public class HotbarSlot : MonoBehaviour
     {
         Image image = slot.GetComponent<Image>();
         image.sprite = newItem.image;
-        if (newItem.type == ItemType.Block)
+        if (newItem.type == ItemType.Block || newItem.type == ItemType.Torch)
             slot.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         else
             slot.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+        numChange();
     }
 
     public void updateSlot()
     {
         item = mainSlot.hotBar[slotnum];
+        numberofItem = mainSlot.numberOfItem[slotnum];
         InitialiseItem(item);
+    }
+
+    public void numChange()
+    {
+        if (item.stackable)
+        {
+            if (numberofItem != 0)
+                numpad.SetActive(true);
+            numpad.GetComponent<TextMeshProUGUI>().text = numberofItem.ToString();
+        }
+        else
+        {
+            numpad.SetActive(false);
+            numpad.GetComponent<TextMeshProUGUI>().text = "0";
+        }
+    }
+
+    public void ChangetoCurrent()
+    {
+        mainSlot.current = slotnum;
     }
 }
