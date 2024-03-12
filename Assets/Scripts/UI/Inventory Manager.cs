@@ -69,10 +69,11 @@ public class Inventory : MonoBehaviour
         return -1;
     }
 
-    public void LootItem(Item item, int num)
+    public bool LootItem(Item item, int num)
     {
         int slot = EmptySlot(item);
-        //if(slot != -1)
+        if (slot != -1)
+            return false;
 
     }
 }
