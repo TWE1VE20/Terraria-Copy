@@ -20,7 +20,6 @@ public class Inventory : MonoBehaviour
     [Header("Current Slot")]
     public int current;
     
-
     private bool activeInventory = false;
 
     private void Start()
@@ -56,4 +55,24 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    private int EmptySlot(Item lootitem)
+    {
+        for (int i = 0; i < 50; i++)
+        {
+            if (numberOfItem[i] == 0)
+                return i;
+            if (i < 10 && (hotBar[i] == lootitem && numberOfItem[i] < 999))
+                return i;
+            if (i >= 10 && (hotBar[i] == lootitem && numberOfItem[i] < 999))
+                return i;
+        }
+        return -1;
+    }
+
+    public void LootItem(Item item, int num)
+    {
+        int slot = EmptySlot(item);
+        //if(slot != -1)
+
+    }
 }
