@@ -4,15 +4,18 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Inventory : MonoBehaviour
+public class InventoryManager : MonoBehaviour
 {
     public GameObject FullInventoryPanel;
     public GameObject ShrinkInventoryPanel;
 
     [Header("Inventory Managemant")]
+    // 인벤토리를 전부 읽어오는  Array를 추가했기에 추후 이에 연결하는 작업 필요
     public Item[] hotBar;
     public int[] numberOfItem;
     public Item[] inventorySlot;
+
+    public InventorySlot[] inventorySlots;
 
     [Header("Main Slots")]
     public HotbarSlot[] mainInventory;
@@ -61,19 +64,31 @@ public class Inventory : MonoBehaviour
         {
             if (numberOfItem[i] == 0)
                 return i;
-            if (i < 10 && (hotBar[i] == lootitem && numberOfItem[i] < 999))
-                return i;
-            if (i >= 10 && (hotBar[i] == lootitem && numberOfItem[i] < 999))
-                return i;
+            if (lootitem.stackable)
+            {
+                if (i < 10 && (hotBar[i] == lootitem && numberOfItem[i] < 999))
+                    return i;
+                if (i >= 10 && (hotBar[i] == lootitem && numberOfItem[i] < 999))
+                    return i;
+            }
         }
         return -1;
     }
 
     public bool LootItem(Item item, int num)
     {
+        Debug.Log("Looting");
         int slot = EmptySlot(item);
-        if (slot != -1)
+        if (slot == -1)
+        {
+            Debug.Log("Looting failed");
             return false;
-
+        }
+        else
+        {
+            inventorySlots[slot].ItemInsert(item, num);
+        }
+        Debug.Log("Looting End");
+        return true;
     }
 }

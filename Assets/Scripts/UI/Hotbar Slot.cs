@@ -9,7 +9,7 @@ public class HotbarSlot : MonoBehaviour
     public Item item;
     public GameObject MouseSlot;
     public int slotnum;
-    public Inventory mainSlot;
+    public InventoryManager mainSlot;
     public int numberofItem;
     public GameObject numpad;
 

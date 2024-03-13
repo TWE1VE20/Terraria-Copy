@@ -154,6 +154,8 @@ MonoBehaviour:
   numberofItem: 0
   numpad: {fileID: 7714664318236661481}
   slot: {fileID: 5328158213044578498}
+  dropItemPrefab: {fileID: 6537166171139256851, guid: 0d4bb529865b1b94d98089b721a8c7cd, type: 3}
+  player: {fileID: 0}
 --- !u!1 &5328158213044578498
 GameObject:
   m_ObjectHideFlags: 0

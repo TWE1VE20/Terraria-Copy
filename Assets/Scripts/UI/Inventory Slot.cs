@@ -7,15 +7,22 @@ using UnityEngine.UI;
 
 public class InventorySlot : MonoBehaviour
 {
+    
+
+    [Header("Slot info")]
     public Item item;
     public GameObject MouseSlot;
     public int slotnum;
-    public Inventory mainSlot;
+    public InventoryManager mainSlot;
     public int numberofItem;
     public GameObject numpad;
 
     [Header("UI")]
     public GameObject slot;
+
+    [Header("Prefab")]
+    public DropItem dropItemPrefab;
+    public Transform player;
 
     [ContextMenu("InitialiseItem")]
     private void Start()
@@ -60,6 +67,47 @@ public class InventorySlot : MonoBehaviour
 
         InitialiseItem(item);
         Debug.Log($"Exchange {slotnum}");
+    }
+
+    public void ItemInsert(Item lootitem, int num)
+    {
+        if (lootitem == item)
+        {
+            Debug.Log("Same Item");
+            if (num + numberofItem <= 999)
+            {
+                numberofItem += num;
+                mainSlot.numberOfItem[slotnum] = numberofItem;
+                Debug.Log(numberofItem);
+                numChange();
+            }
+            else
+            {
+                DropItem dropeditem = Instantiate(dropItemPrefab, player.position, player.rotation);
+                dropeditem.item = lootitem;
+                dropeditem.numberOf = numberofItem + num - 999;
+                numberofItem = 999;
+                mainSlot.numberOfItem[slotnum] = 999;
+                Debug.Log(numberofItem);
+                numChange();
+            }
+        }
+        else
+        {
+            Debug.Log("Empty Slot");
+            numberofItem = num;
+            item = lootitem;
+            mainSlot.numberOfItem[slotnum] = num;
+            if (slotnum <= 9)
+            {
+                mainSlot.hotBar[slotnum] = lootitem;
+                mainSlot.mainInventory[slotnum].updateSlot();
+                Debug.Log("Hotbar Slot update");
+            }
+            else
+                mainSlot.inventorySlot[slotnum - 10] = lootitem;
+            InitialiseItem(lootitem);
+        }
     }
 
     // 아이템 스프라이트 업데이트

@@ -10,17 +10,23 @@ public class DropItem : MonoBehaviour
     [SerializeField] public Item item;
     [SerializeField] public int numberOf;
     [SerializeField] public LayerMask layermask;
+    [SerializeField] public InventoryManager invenManager;
+
+    private bool touching;
 
     public void Start()
     {
-        SpriteRenderer sprite = gameObject.GetComponent<SpriteRenderer  >();
+        touching = false;
+        SpriteRenderer sprite = gameObject.GetComponent<SpriteRenderer>();
         sprite.sprite = item.image;
     }
 
 
     public void Update()
     {
-        
+        if (touching)
+            if (invenManager.LootItem(item, numberOf))
+                Destroy(gameObject);
     }
 
     Collider2D[] colliders = new Collider2D[20];
@@ -37,8 +43,15 @@ public class DropItem : MonoBehaviour
     {
         if(layermask.Contain(collision.gameObject.layer))
         {
-            Debug.Log("Take");
+            touching = true;
+            Debug.Log("Take Item");
         }
+    }
+
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if (layermask.Contain(collision.gameObject.layer))
+            touching = false;
     }
 
     private void OnDrawGizmosSelected()
