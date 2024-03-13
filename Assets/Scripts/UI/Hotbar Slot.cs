@@ -48,6 +48,7 @@ public class HotbarSlot : MonoBehaviour
     {
         item = mainSlot.hotBar[slotnum];
         numberofItem = mainSlot.numberOfItem[slotnum];
+        Debug.Log(numberofItem.ToString());
         InitialiseItem(item);
     }
 

@@ -60,10 +60,15 @@ public class InventoryManager : MonoBehaviour
 
     private int EmptySlot(Item lootitem)
     {
+        int firstEmptyslot = -1;
         for (int i = 0; i < 50; i++)
         {
             if (numberOfItem[i] == 0)
-                return i;
+            {
+                if(firstEmptyslot == -1)
+                    firstEmptyslot = i;
+                continue;
+            }
             if (lootitem.stackable)
             {
                 if (i < 10 && (hotBar[i] == lootitem && numberOfItem[i] < 999))
@@ -72,7 +77,10 @@ public class InventoryManager : MonoBehaviour
                     return i;
             }
         }
-        return -1;
+        if (firstEmptyslot == -1)
+            return -1;
+        else
+            return firstEmptyslot;
     }
 
     public bool LootItem(Item item, int num)

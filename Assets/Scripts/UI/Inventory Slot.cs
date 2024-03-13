@@ -91,6 +91,12 @@ public class InventorySlot : MonoBehaviour
                 Debug.Log(numberofItem);
                 numChange();
             }
+            if (slotnum <= 9)
+            {
+                mainSlot.hotBar[slotnum] = lootitem;
+                mainSlot.mainInventory[slotnum].updateSlot();
+                Debug.Log("Hotbar Slot update");
+            }
         }
         else
         {
