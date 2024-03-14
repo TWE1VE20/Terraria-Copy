@@ -759,7 +759,7 @@ GameObject:
   - component: {fileID: 151393182}
   - component: {fileID: 151393184}
   - component: {fileID: 151393183}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ForeGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3519,8 +3519,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6537166171139256851, guid: 0d4bb529865b1b94d98089b721a8c7cd, type: 3}
+      propertyPath: item
+      value: 
+      objectReference: {fileID: 11400000, guid: 9304e1c741e02b4449bdb49e290527de, type: 2}
+    - target: {fileID: 6537166171139256851, guid: 0d4bb529865b1b94d98089b721a8c7cd, type: 3}
       propertyPath: numberOf
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6537166171139256851, guid: 0d4bb529865b1b94d98089b721a8c7cd, type: 3}
       propertyPath: invenManager
@@ -4828,7 +4832,7 @@ GameObject:
   - component: {fileID: 861070121}
   - component: {fileID: 861070120}
   - component: {fileID: 861070122}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15656,7 +15660,7 @@ MonoBehaviour:
   jumpSpeed: 10
   groundCheckLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 256
 --- !u!114 &1445835507 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1547185907981218653, guid: 32df7ae5288d4d24dab5b450781c04d1, type: 3}
@@ -15802,7 +15806,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1473442678}
   - component: {fileID: 1473442677}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18049,7 +18053,7 @@ GameObject:
   - component: {fileID: 1770250150}
   - component: {fileID: 1770250152}
   - component: {fileID: 1770250151}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ropes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19728,7 +19732,7 @@ GameObject:
   - component: {fileID: 1971501216}
   - component: {fileID: 1971501218}
   - component: {fileID: 1971501217}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19788,8 +19792,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1313945703
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0.5, y: 0.5, z: 0}
