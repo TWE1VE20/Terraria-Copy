@@ -22,8 +22,6 @@ public class PlayerAction : MonoBehaviour
     private int currentSlot;
     private Item currentItem;
 
-    public Camera camera;
-
     private void Start()
     {
         currentSlot = 0;
@@ -42,38 +40,24 @@ public class PlayerAction : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0))
         {
+            // 마우스 커서 위치에서 타일 좌표 가져오기
             Vector3 mousePosition = Input.mousePosition;
-            mousePosition.z = camera.nearClipPlane;
-            Ray ray = camera.ScreenPointToRay(mousePosition);
-            RaycastHit hit;
+            Vector3Int tilePosition = blockMap.WorldToCell(Camera.main.ScreenToWorldPoint(mousePosition));
 
-            if (Physics.Raycast(ray, out hit, 500f))
-            {
-                Gizmos.DrawLine(ray.origin, hit.point);
-                Vector3Int position = blockMap.WorldToCell(hit.point);
+            // 타일 설정
+            blockMap.SetTile(tilePosition, null);
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            // 마우스 커서 위치에서 타일 좌표 가져오기
+            Vector3 mousePosition = Input.mousePosition;
+            Vector3Int tilePosition = wallMap.WorldToCell(Camera.main.ScreenToWorldPoint(mousePosition));
 
-                if (mineLayer.Contain(hit.collider.gameObject.layer))
-                {
-                    // 타일 삭제
-                    blockMap.SetTile(position, null);
-                }
-                // Raycast가 맞춘 물체의 이름 출력
-                Debug.Log("Raycast hit: " + hit.collider.gameObject.name);
-
-                // Raycast가 맞춘 물체의 태그 출력
-                Debug.Log("Raycast hit tag: " + hit.collider.gameObject.tag);
-
-                // Raycast가 맞춘 물체의 레이어 출력
-                Debug.Log("Raycast hit layer: " + hit.collider.gameObject.layer);
-            }
-            else
-            {
-                // Raycast가 아무것도 맞추지 않았을 때 출력
-                Debug.Log("Raycast did not hit anything");
-            }
-            Debug.Log("click");
+            // 타일 설정
+            wallMap.SetTile(tilePosition, null);
         }
     }
+
     private void OnClick(InputValue value)
     {
         // fsm.Action(Vector3Int.FloorToInt(value.Get<Vector3>()));
@@ -129,7 +113,6 @@ public class PlayerAction : MonoBehaviour
         */
     }
 
-    /*
     #region State
     public enum State { Alive, Dead, Size }
     private class StateMachine
@@ -193,5 +176,4 @@ public class PlayerAction : MonoBehaviour
         }
     }
     #endregion
-    */
 }
