@@ -73,7 +73,7 @@ public class InventoryManager : MonoBehaviour
             {
                 if (i < 10 && (hotBar[i] == lootitem && numberOfItem[i] < 999))
                     return i;
-                if (i >= 10 && (hotBar[i] == lootitem && numberOfItem[i] < 999))
+                if (i >= 10 && (inventorySlot[i-10] == lootitem && numberOfItem[i] < 999))
                     return i;
             }
         }
@@ -87,6 +87,7 @@ public class InventoryManager : MonoBehaviour
     {
         Debug.Log("Looting");
         int slot = EmptySlot(item);
+        Debug.Log($"putting in slot {slot}");
         if (slot == -1)
         {
             Debug.Log("Looting failed");

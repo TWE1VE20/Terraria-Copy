@@ -1,7 +1,7 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
+using UnityEngine.WSA;
 
 public class PlayerAction : MonoBehaviour
 {
@@ -17,6 +17,12 @@ public class PlayerAction : MonoBehaviour
     [SerializeField] LayerMask cutDownLayer;
     [SerializeField] LayerMask WallCrushLayer;
 
+    [Header("Prefab")]
+    [SerializeField] public DropItem dropItemPrefab;
+
+    [Header("Animation")]
+    [SerializeField] Animator animator;
+
     private StateMachine fsm;
 
     private int currentSlot;
@@ -27,8 +33,8 @@ public class PlayerAction : MonoBehaviour
         currentSlot = 0;
         currentItem = null;
 
-        // fsm = new StateMachine();
-        // fsm.Init(this);
+        fsm = new StateMachine();
+        fsm.Init(this);
     }
 
     private void Update()
@@ -38,6 +44,8 @@ public class PlayerAction : MonoBehaviour
             this.currentSlot = inventoryManager.current;
             this.currentItem = inventoryManager.mainInventory[currentSlot].item;
         }
+        fsm.Action();
+        /*
         if (Input.GetMouseButtonDown(0))
         {
             // 마우스 커서 위치에서 타일 좌표 가져오기
@@ -56,60 +64,6 @@ public class PlayerAction : MonoBehaviour
             // 타일 설정
             wallMap.SetTile(tilePosition, null);
         }
-    }
-
-    private void OnClick(InputValue value)
-    {
-        // fsm.Action(Vector3Int.FloorToInt(value.Get<Vector3>()));
-        // Debug.Log("click");
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
-        {
-            Vector3Int tilePosition;
-            if (mineLayer.Contain(hit.collider.gameObject.layer))
-            {
-                tilePosition = blockMap.WorldToCell(hit.point);
-                blockMap.SetTile(tilePosition, null);
-            }
-        }
-    }
-
-    public void CreateTile(Vector3Int position, Item item)
-    {
-        /*
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
-        {
-            int layerMask = 1 << hit.collider.gameObject.layer;
-
-            if ((layerMask & tilemapLayerMask) != 0)
-            {
-                Vector3Int position = tilemap.WorldToCell(hit.point);
-                tilemap.SetTile(position, item.tileData.tile);
-            }
-        }
-        */
-    }
-
-    public void EraseTile(Vector3Int position)
-    {
-        /*
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
-        {
-            int layerMask = 1 << hit.collider.gameObject.layer;
-
-            if ((layerMask & tilemapLayerMask) != 0)
-            {
-                Vector3Int position = tilemap.WorldToCell(hit.point);
-                tilemap.ClearTile(position);
-            }
-        }
         */
     }
 
@@ -123,9 +77,13 @@ public class PlayerAction : MonoBehaviour
         {
             states = new BaseState[(int)State.Size];
             states[(int)State.Alive] = new AliveState(this, player);
+            states[(int)State.Dead] = new AliveState(this, player);
+
+            curState = State.Alive;
+            states[(int)curState].Enter();
         }
 
-        public void Action(Vector3Int position)
+        public void Action()
         {
             states[(int)curState].Action();
         }
@@ -155,25 +113,120 @@ public class PlayerAction : MonoBehaviour
 
     private class AliveState : BaseState
     {
-        protected StateMachine fsm;
-        protected PlayerAction player;
-        protected Item item => player.currentItem;
-
         public AliveState(StateMachine fsm, PlayerAction player) : base(fsm, player) {}
         public override void Action()
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (player.hp <= 0)
             {
-                Vector3Int tilePosition;
-                if (player.mineLayer.Contain(hit.collider.gameObject.layer))
+                fsm.ChangeState(State.Dead);
+            }
+            else
+            {
+                switch (item.type)
                 {
-                    tilePosition = player.blockMap.WorldToCell(hit.point);
-                    player.blockMap.SetTile(tilePosition, null);
+                    case ItemType.None:
+                        break;
+                    case ItemType.Equipment:
+                        break;
+                    case ItemType.Tool:
+                        switch (item.actionType)
+                        {
+                            case ActionType.None:
+                                break;
+                            case ActionType.Mine:
+                                if (Input.GetMouseButtonDown(0))
+                                {
+                                    // 마우스 커서 위치에서 타일 좌표 가져오기
+                                    Vector3 mousePosition = Input.mousePosition;
+                                    Vector3Int tilePosition = player.blockMap.WorldToCell(Camera.main.ScreenToWorldPoint(mousePosition));
+
+                                    // 타일 설정
+                                    TileBase tile = player.blockMap.GetTile(tilePosition);
+                                    if (tile != null)
+                                    {
+                                        AdvancedRuleTile tileData = tile as AdvancedRuleTile;
+                                        DropItem dropeditem = Instantiate(player.dropItemPrefab, tilePosition, player.transform.rotation);  
+                                        dropeditem.item = tileData.item;
+                                        dropeditem.numberOf = 1;
+                                        dropeditem.invenManager = player.inventoryManager;
+                                        player.blockMap.SetTile(tilePosition, null);
+                                    }
+                                    player.animator.SetTrigger("Swing");
+                                }
+                                break;
+                            case ActionType.WallCrush:
+                                if (Input.GetMouseButtonDown(0))
+                                {
+                                    // 마우스 커서 위치에서 타일 좌표 가져오기
+                                    Vector3 mousePosition = Input.mousePosition;
+                                    Vector3Int tilePosition = player.wallMap.WorldToCell(Camera.main.ScreenToWorldPoint(mousePosition));
+
+                                    // 타일 설정
+                                    TileBase tile = player.wallMap.GetTile(tilePosition);
+                                    if (tile != null)
+                                    {
+                                        AdvancedRuleTile tileData = tile as AdvancedRuleTile;
+                                        DropItem dropeditem = Instantiate(player.dropItemPrefab, tilePosition, player.transform.rotation);
+                                        dropeditem.item = tileData.item;
+                                        dropeditem.numberOf = 1;
+                                        dropeditem.invenManager = player.inventoryManager;
+                                        player.wallMap.SetTile(tilePosition, null);
+                                    }
+                                    player.animator.SetTrigger("Swing");
+                                }
+                                break;
+                        }
+                        break;
+                    case ItemType.Weapon:
+                        break;
+                    case ItemType.Block:
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            // 마우스 커서 위치에서 타일 좌표 가져오기
+                            Vector3 mousePosition = Input.mousePosition;
+                            Vector3Int tilePosition = player.blockMap.WorldToCell(Camera.main.ScreenToWorldPoint(mousePosition));
+
+                            // 타일 설정
+                            if (player.blockMap.GetTile(tilePosition) == null)
+                                if (player.blockMap.GetTile(tilePosition + Vector3Int.left) != null ||
+                                    player.blockMap.GetTile(tilePosition + Vector3Int.right) != null ||
+                                    player.blockMap.GetTile(tilePosition + Vector3Int.up) != null ||
+                                    player.blockMap.GetTile(tilePosition + Vector3Int.down) != null
+                                    )
+                                {
+                                    player.blockMap.SetTile(tilePosition, item.tile);
+                                }
+                            player.animator.SetTrigger("Swing");
+                        }
+                        break;
+                    case ItemType.Wall:
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            // 마우스 커서 위치에서 타일 좌표 가져오기
+                            Vector3 mousePosition = Input.mousePosition;
+                            Vector3Int tilePosition = player.wallMap.WorldToCell(Camera.main.ScreenToWorldPoint(mousePosition));
+
+                            // 타일 설정
+                            if (player.wallMap.GetTile(tilePosition) == null)
+                                player.wallMap.SetTile(tilePosition, item.tile);
+                        }
+                        break;
+                    case ItemType.Potion:
+                        break;
+                    case ItemType.Torch:
+                        break;
                 }
             }
         }
     }
-    #endregion
+
+    private class DeadState : BaseState
+    {
+        public DeadState(StateMachine fsm, PlayerAction player) : base(fsm, player) {}
+        public override void Action()
+        {
+
+        }
+    }
 }
+#endregion

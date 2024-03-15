@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [Header("Component")]
     [SerializeField] Rigidbody2D rigid;
     [SerializeField] SpriteRenderer[] render;
+    [SerializeField] GameObject fliper;
     [SerializeField] Animator animator;
 
     [Header("Property")]
@@ -77,12 +78,14 @@ public class PlayerController : MonoBehaviour
         {
             foreach (SpriteRenderer renderflip in render)
                 renderflip.flipX = true;
+            fliper.transform.localScale = new Vector3(-1, 1, 1);
             animator.SetBool("Move", true);
         }
         else if (moveDir.x > 0)
         {
             foreach (SpriteRenderer renderflip in render)
                 renderflip.flipX = false;
+            fliper.transform.localScale = new Vector3(1, 1, 1);
             animator.SetBool("Move", true);
         }
         else

@@ -10,6 +10,7 @@ public class AdvancedRuleTile : RuleTile<AdvancedRuleTile.Neighbor> {
     public bool customField;
 
     public bool alwaysConnect;
+    public Item item;
     public TileBase[] tilesToConnect;
     public bool checkSelf;
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[CreateAssetMenu(fileName = "TowerData", menuName = "Data/Item")]
+[CreateAssetMenu(fileName = "Item Data", menuName = "Data/Item")]
 public class Item : ScriptableObject
 {
     [Header("Only gameplay")]

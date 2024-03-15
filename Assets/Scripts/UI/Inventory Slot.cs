@@ -76,6 +76,7 @@ public class InventorySlot : MonoBehaviour
             Debug.Log("Same Item");
             if (num + numberofItem <= 999)
             {
+                Debug.Log("Item Stack");
                 numberofItem += num;
                 mainSlot.numberOfItem[slotnum] = numberofItem;
                 Debug.Log(numberofItem);
@@ -83,9 +84,11 @@ public class InventorySlot : MonoBehaviour
             }
             else
             {
+                Debug.Log("Item Overflow");
                 DropItem dropeditem = Instantiate(dropItemPrefab, player.position, player.rotation);
                 dropeditem.item = lootitem;
                 dropeditem.numberOf = numberofItem + num - 999;
+                dropeditem.invenManager = mainSlot;
                 numberofItem = 999;
                 mainSlot.numberOfItem[slotnum] = 999;
                 Debug.Log(numberofItem);
@@ -122,6 +125,7 @@ public class InventorySlot : MonoBehaviour
         item = mainSlot.hotBar[slotnum];
         InitialiseItem(item);
     }
+
 
     // 숫자판 숫자 변경
     public void numChange()
