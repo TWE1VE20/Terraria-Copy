@@ -159,20 +159,20 @@ public class Zombie : MonoBehaviour
                 owner.rigid.AddForce(Vector2.right * dir.x * owner.movePower);
                 owner.animator.SetBool("Move", true);
             }
-            else if ((owner.rigid.velocity.x < 0.03f || owner.rigid.velocity.x > -0.03f) && dir.x != 0)
+            else
             {
-                Debug.Log("Try Jump");
-                if (owner.isGrounded) 
+                owner.animator.SetBool("Move", false);
+            }
+
+            if (owner.rigid.velocity.x < 0.01f && owner.rigid.velocity.x > -0.01f && dir.x != 0)
+            {
+                if (owner.isGrounded)
                 {
                     Debug.Log("Jump");
                     Vector2 velocity = owner.rigid.velocity;
                     velocity.y = owner.jumpSpeed;
                     owner.rigid.velocity = velocity;
                 }
-            }
-            else
-            {
-                owner.animator.SetBool("Move", false);
             }
         }
 
