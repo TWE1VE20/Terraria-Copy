@@ -15368,7 +15368,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.010832787, y: 0.010832548}
+  m_Offset: {x: -0.010832787, y: 0.06770384}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -15379,7 +15379,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.0615826, y: 2.884851}
+  m_Size: {x: 2.0615826, y: 2.7711084}
   m_EdgeRadius: 0
 --- !u!1 &1267751378
 GameObject:
@@ -15668,9 +15668,10 @@ MonoBehaviour:
   breakPower: 8
   moveSpeed: 8
   maxXSpeed: 1
+  jumpSpeed: 10
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
 --- !u!114 &1280723135 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1547185907981218653, guid: 32df7ae5288d4d24dab5b450781c04d1, type: 3}
@@ -16253,9 +16254,9 @@ MonoBehaviour:
   - {fileID: 188875297}
   fliper: {fileID: 1583339928}
   animator: {fileID: 1437510526}
-  movePower: 20
+  movePower: 18
   breakPower: 10
-  maxXSpeed: 15
+  maxXSpeed: 12
   maxYSpeed: 15
   maxAnimSpeed: 2
   jumpSpeed: 10
