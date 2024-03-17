@@ -14,6 +14,7 @@ public class Zombie : MonoBehaviour
     [SerializeField] float breakPower;
     [SerializeField] public float moveSpeed;
     [SerializeField] public float maxXSpeed;
+    [SerializeField] float jumpSpeed;
 
     [Header("Ground Check")]
     [SerializeField] public LayerMask groundLayer;
@@ -157,6 +158,17 @@ public class Zombie : MonoBehaviour
                 owner.ZombieSprite.flipX = true;
                 owner.rigid.AddForce(Vector2.right * dir.x * owner.movePower);
                 owner.animator.SetBool("Move", true);
+            }
+            else if ((owner.rigid.velocity.x < 0.03f && owner.rigid.velocity.x > -0.03f) && dir.x != 0)
+            {
+                Debug.Log("Try Jump");
+                if (owner.isGrounded) 
+                {
+                    Debug.Log("Jump");
+                    Vector2 velocity = owner.rigid.velocity;
+                    velocity.y = owner.jumpSpeed;
+                    owner.rigid.velocity = velocity;
+                }
             }
             else
             {
