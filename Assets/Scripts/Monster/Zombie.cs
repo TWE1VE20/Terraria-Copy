@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Zombie : MonoBehaviour, IDamageable
 {
@@ -8,7 +9,7 @@ public class Zombie : MonoBehaviour, IDamageable
     [SerializeField] Rigidbody2D rigid;
     [SerializeField] Monster monsterStat;
     [SerializeField] Animator animator;
-    [SerializeField] SpriteRenderer ZombieSprite;
+    [SerializeField] public SpriteRenderer ZombieSprite;
     [SerializeField] GroundChecker groundChecker;
     [SerializeField] Gore gorePrefab;
 
@@ -26,11 +27,9 @@ public class Zombie : MonoBehaviour, IDamageable
     private StateMachine fsm;
     private Transform playerTransform;
 
-    public bool isGround => groundChecker.IsGround;
+    public bool isGrounded => groundChecker.IsGround;
 
     public int hp { get; private set; }
-    public bool isGrounded { get; private set; }
-
 
     private void Start()
     {
@@ -47,6 +46,10 @@ public class Zombie : MonoBehaviour, IDamageable
     }
     private void Update()
     {
+        if (isGrounded)
+            animator.SetBool("OnGround", true);
+        else
+            animator.SetBool("OnGround", false);
         fsm.Update();
     }
 
@@ -146,8 +149,15 @@ public class Zombie : MonoBehaviour, IDamageable
 
     private class TraceState : BaseState
     {
+        private Coroutine routine;
+        private float mintime = 2.0f;
+        private float maxtime = 5.0f;
         public TraceState(StateMachine fsm, Zombie owner) : base(fsm, owner) { }
 
+        public override void Enter()
+        {
+            routine = owner.StartCoroutine(JumpRoutine());
+        }
         public override void Update()
         {
             Vector2 dir = (owner.playerTransform.position - owner.transform.position).normalized;
@@ -167,24 +177,29 @@ public class Zombie : MonoBehaviour, IDamageable
             {
                 owner.animator.SetBool("Move", false);
             }
-
-            if (owner.rigid.velocity.x < 0.01f && owner.rigid.velocity.x > -0.01f && dir.x != 0)
-            {
-                if (owner.isGrounded)
-                {
-                    Debug.Log("Jump");
-                    Vector2 velocity = owner.rigid.velocity;
-                    velocity.y = owner.jumpSpeed;
-                    owner.rigid.velocity = velocity;
-                }
-            }
         }
 
         public override void Transition()
         {
             if (owner.hp <= 0)
             {
+                owner.StopCoroutine(routine);
                 fsm.ChangeState(State.Die);
+            }
+        }
+
+        IEnumerator JumpRoutine()
+        {
+            while (true)
+            {
+                Debug.Log("Jump");
+                if (owner.isGrounded)
+                {
+                    Vector2 velocity = owner.rigid.velocity;
+                    velocity.y = owner.jumpSpeed;
+                    owner.rigid.velocity = velocity;
+                }
+                yield return new WaitForSeconds(Random.Range(mintime, maxtime));
             }
         }
     }
@@ -206,30 +221,20 @@ public class Zombie : MonoBehaviour, IDamageable
 
     private class DieState : BaseState
     {
-        private Coroutine routine;
-
         public DieState(StateMachine fsm, Zombie owner) : base(fsm, owner){}
 
         public override void Enter()
         {
-            // routine = owner.StartCoroutine(DieRoutine());
             if(owner.monsterStat.gore.Count !=0)
             {
-                Gore gore = Instantiate(owner.gorePrefab, owner.transform.position, owner.transform.rotation);
-                // gore.GetComponent<SpriteRenderer> = null;
-                // dropeditem.numberOf = numberofItem + num - 999;
-                // dropeditem.invenManager = mainSlot;
+                for (int i = 0; i < owner.monsterStat.gore.Count; i++)
+                {
+                    Gore gore = Instantiate(owner.gorePrefab, owner.transform.position, owner.transform.rotation);
+                    gore.goreSprite.sprite = owner.monsterStat.gore[i];
+                }
             }
             Destroy(owner.gameObject);
         }
-
-        /*
-        IEnumerator DieRoutine()
-        {
-            yield return new WaitForSeconds(1);
-            Destroy(owner.gameObject);
-        }
-        */
     }
 
     #endregion

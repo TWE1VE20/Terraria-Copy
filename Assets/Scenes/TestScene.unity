@@ -15863,7 +15863,7 @@ MonoBehaviour:
   animator: {fileID: 1279478928}
   ZombieSprite: {fileID: 1279478926}
   groundChecker: {fileID: 1743480047}
-  gorePrefab: {fileID: 0}
+  gorePrefab: {fileID: 2979053683543113931, guid: fa09da039d9cc334b8a222f89d10ee3c, type: 3}
   movePower: 8
   breakPower: 8
   moveSpeed: 8
