@@ -1,7 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class PlayerAction : MonoBehaviour
+public class PlayerAction : MonoBehaviour, IDamageable
 {
     [SerializeField] InventoryManager inventoryManager;
     [SerializeField] int maxHp;
@@ -22,13 +24,26 @@ public class PlayerAction : MonoBehaviour
     [Header("Animation")]
     [SerializeField] Animator animator;
 
+    [Header("Coroutine")]
+    [SerializeField] float Seconds;
+
     private StateMachine fsm;
+    private Coroutine invincibleCoroutine;
+    private bool isInvincible;
 
     private int currentSlot;
     private Item currentItem;
 
+    public SpriteRenderer[] sprites;
+
+    private void Awake()
+    {
+        sprites = GetComponentsInChildren<SpriteRenderer>();
+    }
+
     private void Start()
     {
+        hp = 500;
         currentSlot = 0;
         currentItem = null;
 
@@ -52,6 +67,40 @@ public class PlayerAction : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Vector3 direction = (ray.origin - transform.position).normalized;
         gameObject.GetComponent<PlayerController>().Flip(direction.x);
+    }
+    public void TakeHit(int damage, GameObject attacker)
+    {
+        if (!isInvincible)
+        {
+            hp -= damage;
+            Vector3 knockbackDirection = (transform.position - attacker.transform.position).normalized;
+            GetComponent<Rigidbody2D>().AddForce(knockbackDirection * 10f, ForceMode2D.Impulse);
+            invincibleCoroutine = StartCoroutine(InvincibleCoroutine());
+        }
+    }
+
+    IEnumerator InvincibleCoroutine()
+    {
+        isInvincible = true;
+        animator.SetTrigger("Damaged");
+        for (int i = 0; i < 5; i++)
+        {
+            foreach (SpriteRenderer sprite in sprites)
+            {
+                Color color = sprite.color;
+                color.a = 0.9f;
+                sprite.color = color;
+            }
+            yield return new WaitForSeconds(Seconds / 10);
+            foreach (SpriteRenderer sprite in sprites)
+            {
+                Color color = sprite.color;
+                color.a = 1f;
+                sprite.color = color;
+            }
+            yield return new WaitForSeconds(Seconds / 10);
+        }
+        isInvincible = false;
     }
 
     #region State

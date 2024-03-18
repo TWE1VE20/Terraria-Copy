@@ -1,13 +1,16 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
-public class Zombie : MonoBehaviour
+public class Zombie : MonoBehaviour, IDamageable
 {
     [Header("Component")]
     [SerializeField] Rigidbody2D rigid;
     [SerializeField] Monster monsterStat;
     [SerializeField] Animator animator;
     [SerializeField] SpriteRenderer ZombieSprite;
+    [SerializeField] GroundChecker groundChecker;
+    [SerializeField] Gore gorePrefab;
 
     [Header("Property")]
     [SerializeField] float movePower;
@@ -23,7 +26,7 @@ public class Zombie : MonoBehaviour
     private StateMachine fsm;
     private Transform playerTransform;
 
-    private Collider2D groundCollider;  // 바닥 체크 콜라이더
+    public bool isGround => groundChecker.IsGround;
 
     public int hp { get; private set; }
     public bool isGrounded { get; private set; }
@@ -40,8 +43,6 @@ public class Zombie : MonoBehaviour
         fsm = new StateMachine();
         fsm.Init(this);
 
-        groundCollider = GetComponent<Collider2D>();
-
         playerTransform = GameObject.FindWithTag("Player").transform;
     }
     private void Update()
@@ -51,43 +52,29 @@ public class Zombie : MonoBehaviour
 
     private void FixedUpdate()
     {
-        isGrounded = CheckGround();
     }
 
-    public void TakeHit(int damage)
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.GetComponent<IDamageable>().TakeHit(5, gameObject);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.GetComponent<IDamageable>().TakeHit(5, gameObject);
+        }
+    }
+
+    public void TakeHit(int damage, GameObject attacker)
     {
         hp -= damage;
-    }
-
-    bool CheckGround()
-    {
-        Vector2[] rayDirections = new Vector2[] {
-            Vector2.down + Vector2.right,
-            Vector2.down + Vector2.left,
-            Vector2.down
-        };
-
-        bool[] hitResults = new bool[3];
-        for (int i = 0; i < 3; i++)
-            hitResults[i] = Raycast(rayDirections[i]);
-
-        for (int i = 0; i < 3; i++)
-            if (hitResults[i])
-                return true;
-        return false;
-    }
-
-    bool Raycast(Vector2 direction)
-    {
-        Vector2 rayOrigin = groundCollider.bounds.center;
-        float rayDistance = groundCollider.bounds.extents.y;
-
-        RaycastHit2D hit = Physics2D.Raycast(rayOrigin, direction, rayDistance, groundLayer);
-
-        if (hit.collider != null)
-            return true;
-        else
-            return false;
+        Vector3 knockbackDirection = (transform.position - attacker.transform.position).normalized;
+        GetComponent<Rigidbody2D>().AddForce(knockbackDirection * monsterStat.knockBack, ForceMode2D.Impulse);
     }
 
     #region State
@@ -221,21 +208,28 @@ public class Zombie : MonoBehaviour
     {
         private Coroutine routine;
 
-        public DieState(StateMachine fsm, Zombie owner) : base(fsm, owner)
-        {
-        }
+        public DieState(StateMachine fsm, Zombie owner) : base(fsm, owner){}
 
         public override void Enter()
         {
-            routine = owner.StartCoroutine(DieRoutine());
+            // routine = owner.StartCoroutine(DieRoutine());
+            if(owner.monsterStat.gore.Count !=0)
+            {
+                Gore gore = Instantiate(owner.gorePrefab, owner.transform.position, owner.transform.rotation);
+                // gore.GetComponent<SpriteRenderer> = null;
+                // dropeditem.numberOf = numberofItem + num - 999;
+                // dropeditem.invenManager = mainSlot;
+            }
+            Destroy(owner.gameObject);
         }
 
+        /*
         IEnumerator DieRoutine()
         {
             yield return new WaitForSeconds(1);
             Destroy(owner.gameObject);
         }
-
+        */
     }
 
     #endregion

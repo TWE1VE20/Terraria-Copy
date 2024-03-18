@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] SpriteRenderer[] render;
     [SerializeField] GameObject[] fliper;
     [SerializeField] Animator animator;
+    [SerializeField] GroundChecker groundChecker;
 
     [Header("Property")]
     [SerializeField] float movePower;
@@ -22,7 +23,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float maxJumpTime;
     [SerializeField] float maxYSpeed;
 
-    public bool isGround;
+    private bool isGround => groundChecker.IsGround;
 
     private Vector2 moveDir;
     private bool isJumping;
@@ -67,13 +68,6 @@ public class PlayerController : MonoBehaviour
             velocity.y = -maxYSpeed;
             rigid.velocity = velocity;
         }
-    }
-
-    private void Jump()
-    {
-        Vector2 velocity = rigid.velocity;
-        velocity.y = jumpSpeed;
-        rigid.velocity = velocity;
     }
 
     private void OnMove(InputValue value)
@@ -126,10 +120,7 @@ public class PlayerController : MonoBehaviour
 
         while (jumpTime < maxJumpTime)
         {
-            // 점프 버튼을 누른 길이만큼 점프력 조절
             float jumpPower = Input.GetAxis("Jump") * jumpSpeed;
-
-            // 점프력 적용
             rigid.velocity = new Vector2(rigid.velocity.x, jumpPower);
 
             jumpTime += Time.deltaTime;

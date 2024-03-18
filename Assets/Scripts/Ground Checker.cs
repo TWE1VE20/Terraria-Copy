@@ -2,24 +2,23 @@ using UnityEngine;
 
 public class GroundChecker : MonoBehaviour
 {
-    [SerializeField] PlayerController playerCon;
-
     [Header("Ground Check")]
     [SerializeField] LayerMask groundLayer;
     [SerializeField] Collider2D groundCollider;
 
     private bool isGround;
+    public bool IsGround { get { return isGround; } }
 
     private void FixedUpdate()
     {
-        playerCon.isGround = CheckGround();
+        isGround = CheckGround();
     }
 
     bool CheckGround()
     {
         Vector2[] rayDirections = new Vector2[] {
-            Vector2.down + Vector2.right,
-            Vector2.down + Vector2.left,
+            Vector2.down + Vector2.right*2,
+            Vector2.down + Vector2.left*2,
             Vector2.down
         };
 

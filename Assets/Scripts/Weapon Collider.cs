@@ -5,13 +5,13 @@ using UnityEngine;
 public class WeaponCollider : MonoBehaviour
 {
     [SerializeField] LayerMask Target;
+    [SerializeField] GameObject player;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("collision");
         if (collision.gameObject.tag == "Enemy")
         {
-            collision.gameObject.GetComponent<Zombie>().TakeHit(5);
+            collision.gameObject.GetComponent<IDamageable>().TakeHit(5, player);
         }
     }
 }

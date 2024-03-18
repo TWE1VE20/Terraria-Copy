@@ -17,6 +17,9 @@ public class Monster : ScriptableObject
     public float knockBack;
     public int DropMoney;
 
+    [Header("Gore")]
+    public List<Sprite> gore;
+
     /*
     if knockBack > 8.0 then knockBack = 8 + (knockBack - 8.0) * 0.9
     if knockBack > 10.0 then knockBack = 10 + (knockBack - 10.0) * 0.8
