@@ -5161,6 +5161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FullInventoryPanel: {fileID: 16923476}
   ShrinkInventoryPanel: {fileID: 49198788}
+  namePannel: {fileID: 545899337}
   hotBar:
   - {fileID: 11400000, guid: a12a1c64a5907f24f8b1c413a4681d8b, type: 2}
   - {fileID: 11400000, guid: 4197ac85348cc58469edf1166c5b8da9, type: 2}
@@ -15861,7 +15862,8 @@ MonoBehaviour:
   monsterStat: {fileID: 11400000, guid: 6beaa04ae119cfa43af60e4b5e8d480d, type: 2}
   animator: {fileID: 1279478928}
   ZombieSprite: {fileID: 1279478926}
-  groundChecker: {fileID: 0}
+  groundChecker: {fileID: 1743480047}
+  gorePrefab: {fileID: 0}
   movePower: 8
   breakPower: 8
   moveSpeed: 8
@@ -16613,6 +16615,7 @@ MonoBehaviour:
   dropItemPrefab: {fileID: 7688418714975159528, guid: 0d4bb529865b1b94d98089b721a8c7cd, type: 3}
   animator: {fileID: 1437510526}
   Seconds: 1
+  sprites: []
 --- !u!114 &1445835507 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1547185907981218653, guid: 32df7ae5288d4d24dab5b450781c04d1, type: 3}

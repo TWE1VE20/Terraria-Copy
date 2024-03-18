@@ -19,3 +19,7 @@ MonoBehaviour:
   Dex: 10
   knockBack: 5
   DropMoney: 1000
+  gore:
+  - {fileID: 21300000, guid: c53ac7ea812c1c9478ced06c9cb5e7bf, type: 3}
+  - {fileID: 21300000, guid: ea87660f159d784469cb4b88ea406b84, type: 3}
+  - {fileID: 21300000, guid: 47a1a8107f354a7499ae8d05c3ee41d8, type: 3}
