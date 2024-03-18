@@ -36,6 +36,9 @@ public class InventoryManager : MonoBehaviour
 
     private void Update()
     {
+        for (int i = 0; i < 10; i++)
+            if (Input.GetKeyDown(KeyCode.Alpha0 + i))
+                current = i-1;
     }
 
     // ESC가 눌렸을때 인벤토리 변경

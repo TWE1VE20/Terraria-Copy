@@ -61,11 +61,28 @@ public class Zombie : MonoBehaviour
 
     bool CheckGround()
     {
+        Vector2[] rayDirections = new Vector2[] {
+            Vector2.down + Vector2.right,
+            Vector2.down + Vector2.left,
+            Vector2.down
+        };
+
+        bool[] hitResults = new bool[3];
+        for (int i = 0; i < 3; i++)
+            hitResults[i] = Raycast(rayDirections[i]);
+
+        for (int i = 0; i < 3; i++)
+            if (hitResults[i])
+                return true;
+        return false;
+    }
+
+    bool Raycast(Vector2 direction)
+    {
         Vector2 rayOrigin = groundCollider.bounds.center;
-        Vector2 rayDirection = Vector2.down;
         float rayDistance = groundCollider.bounds.extents.y;
 
-        RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, rayDistance, groundLayer);
+        RaycastHit2D hit = Physics2D.Raycast(rayOrigin, direction, rayDistance, groundLayer);
 
         if (hit.collider != null)
             return true;

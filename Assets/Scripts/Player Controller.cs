@@ -9,28 +9,33 @@ public class PlayerController : MonoBehaviour
     [Header("Component")]
     [SerializeField] Rigidbody2D rigid;
     [SerializeField] SpriteRenderer[] render;
-    [SerializeField] GameObject fliper;
+    [SerializeField] GameObject[] fliper;
     [SerializeField] Animator animator;
 
     [Header("Property")]
     [SerializeField] float movePower;
     [SerializeField] float breakPower;
     [SerializeField] float maxXSpeed;
-    [SerializeField] float maxYSpeed;
     [SerializeField] float maxAnimSpeed;
 
     [SerializeField] float jumpSpeed;
+    [SerializeField] float maxJumpTime;
+    [SerializeField] float maxYSpeed;
 
-    [SerializeField] LayerMask groundCheckLayer;
+    public bool isGround;
 
     private Vector2 moveDir;
-    private bool isGround;
-    private int groundCount;
-    private float animeSpeed;
+    private bool isJumping;
+    private Coroutine jumpCoroutine;
+
 
     private void FixedUpdate()
     {
         Move();
+        if(isGround)
+            animator.SetBool("isGround", true);
+        else
+            animator.SetBool("isGround", false);
     }
 
     private void Move()
@@ -74,61 +79,64 @@ public class PlayerController : MonoBehaviour
     private void OnMove(InputValue value)
     {
         moveDir = value.Get<Vector2>();
+        Flip(moveDir.x);
         if (moveDir.x < 0)
+            animator.SetBool("Move", true);
+        else if (moveDir.x > 0)
+            animator.SetBool("Move", true);
+        else
+            animator.SetBool("Move", false);
+    }
+
+    public void Flip(float Dir)
+    {
+        if (Dir < 0)
         {
             foreach (SpriteRenderer renderflip in render)
                 renderflip.flipX = true;
-            fliper.transform.localScale = new Vector3(-1, 1, 1);
-            animator.SetBool("Move", true);
+            foreach (GameObject scaleflip in fliper)
+                scaleflip.transform.localScale = new Vector3(-1, 1, 1);
         }
-        else if (moveDir.x > 0)
+        else if (Dir > 0)
         {
             foreach (SpriteRenderer renderflip in render)
                 renderflip.flipX = false;
-            fliper.transform.localScale = new Vector3(1, 1, 1);
-            animator.SetBool("Move", true);
-        }
-        else
-        {
-            animator.SetBool("Move", false);
+            foreach (GameObject scaleflip in fliper)
+                scaleflip.transform.localScale = new Vector3(1, 1, 1);
         }
     }
 
     private void OnJump(InputValue value)
     {
-        if (isGround)
+        if (value.isPressed)
+            if (isGround)
+                jumpCoroutine = StartCoroutine(JumpCoroutine());
+
+        if (!value.isPressed)
+            if (jumpCoroutine != null)
+                StopCoroutine(jumpCoroutine);
+
+    }
+
+    IEnumerator JumpCoroutine()
+    {
+        isJumping = true;
+
+        float jumpTime = 0f;
+
+        while (jumpTime < maxJumpTime)
         {
-            Jump();
+            // 점프 버튼을 누른 길이만큼 점프력 조절
+            float jumpPower = Input.GetAxis("Jump") * jumpSpeed;
+
+            // 점프력 적용
+            rigid.velocity = new Vector2(rigid.velocity.x, jumpPower);
+
+            jumpTime += Time.deltaTime;
+
+            yield return null;
         }
-    }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        isGround = true;
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        isGround = false;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (groundCheckLayer.Contain(collision.gameObject.layer))
-        {
-            groundCount++;
-            isGround = groundCount > 0;
-            animator.SetBool("isGround", true);
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (groundCheckLayer.Contain(collision.gameObject.layer))
-        {
-            groundCount--;
-            isGround = groundCount > 0;
-            animator.SetBool("isGround", false);
-        }
+        isJumping = false;
     }
 }

@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
-using UnityEngine.WSA;
 
 public class PlayerAction : MonoBehaviour
 {
@@ -18,7 +16,8 @@ public class PlayerAction : MonoBehaviour
     [SerializeField] LayerMask WallCrushLayer;
 
     [Header("Prefab")]
-    [SerializeField] public DropItem dropItemPrefab;
+    [SerializeField] SpriteRenderer holdItem;
+    [SerializeField] DropItem dropItemPrefab;
 
     [Header("Animation")]
     [SerializeField] Animator animator;
@@ -43,28 +42,16 @@ public class PlayerAction : MonoBehaviour
         {
             this.currentSlot = inventoryManager.current;
             this.currentItem = inventoryManager.mainInventory[currentSlot].item;
+            this.holdItem.sprite = currentItem.image;
         }
         fsm.Action();
-        /*
-        if (Input.GetMouseButtonDown(0))
-        {
-            // 마우스 커서 위치에서 타일 좌표 가져오기
-            Vector3 mousePosition = Input.mousePosition;
-            Vector3Int tilePosition = blockMap.WorldToCell(Camera.main.ScreenToWorldPoint(mousePosition));
+    }
 
-            // 타일 설정
-            blockMap.SetTile(tilePosition, null);
-        }
-        if (Input.GetMouseButtonDown(1))
-        {
-            // 마우스 커서 위치에서 타일 좌표 가져오기
-            Vector3 mousePosition = Input.mousePosition;
-            Vector3Int tilePosition = wallMap.WorldToCell(Camera.main.ScreenToWorldPoint(mousePosition));
-
-            // 타일 설정
-            wallMap.SetTile(tilePosition, null);
-        }
-        */
+    public void flipPlayer()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector3 direction = (ray.origin - transform.position).normalized;
+        gameObject.GetComponent<PlayerController>().Flip(direction.x);
     }
 
     #region State
@@ -113,7 +100,7 @@ public class PlayerAction : MonoBehaviour
 
     private class AliveState : BaseState
     {
-        public AliveState(StateMachine fsm, PlayerAction player) : base(fsm, player) {}
+        public AliveState(StateMachine fsm, PlayerAction player) : base(fsm, player) { }
         public override void Action()
         {
             if (player.hp <= 0)
@@ -145,7 +132,7 @@ public class PlayerAction : MonoBehaviour
                                     if (tile != null)
                                     {
                                         AdvancedRuleTile tileData = tile as AdvancedRuleTile;
-                                        DropItem dropeditem = Instantiate(player.dropItemPrefab, tilePosition, player.transform.rotation);  
+                                        DropItem dropeditem = Instantiate(player.dropItemPrefab, tilePosition, player.transform.rotation);
                                         dropeditem.item = tileData.item;
                                         dropeditem.numberOf = 1;
                                         dropeditem.invenManager = player.inventoryManager;
@@ -178,6 +165,18 @@ public class PlayerAction : MonoBehaviour
                         }
                         break;
                     case ItemType.Weapon:
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            player.flipPlayer();
+                            switch (item.actionType)
+                            {
+                                case ActionType.Broadsword:
+                                    player.animator.SetTrigger("Broadsword");
+                                    break;
+                                case ActionType.Shortsword:
+                                    break;
+                            }
+                        }
                         break;
                     case ItemType.Block:
                         if (Input.GetMouseButtonDown(0))
@@ -195,8 +194,8 @@ public class PlayerAction : MonoBehaviour
                                     )
                                 {
                                     player.blockMap.SetTile(tilePosition, item.tile);
+                                    player.animator.SetTrigger("Swing2");
                                 }
-                            player.animator.SetTrigger("Swing");
                         }
                         break;
                     case ItemType.Wall:
@@ -208,7 +207,10 @@ public class PlayerAction : MonoBehaviour
 
                             // 타일 설정
                             if (player.wallMap.GetTile(tilePosition) == null)
+                            {
                                 player.wallMap.SetTile(tilePosition, item.tile);
+                                player.animator.SetTrigger("Swing2");
+                            }
                         }
                         break;
                     case ItemType.Potion:
@@ -222,7 +224,7 @@ public class PlayerAction : MonoBehaviour
 
     private class DeadState : BaseState
     {
-        public DeadState(StateMachine fsm, PlayerAction player) : base(fsm, player) {}
+        public DeadState(StateMachine fsm, PlayerAction player) : base(fsm, player) { }
         public override void Action()
         {
 
