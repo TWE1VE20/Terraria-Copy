@@ -3,23 +3,25 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
+  - Weapon
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
+  - Gore
+  - Item
+  - Weapon
+  - ForeGround
+  - Wall
+  - Blocks
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Enemy
+  - EnemyCollider
   - 
   - 
   - 
@@ -40,4 +42,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Map Grid
+    uniqueID: 1313945703
+    locked: 0
+  - name: Enemy
+    uniqueID: 112770747
+    locked: 0
+  - name: Player
+    uniqueID: 3197157513
+    locked: 0
+  - name: Item
+    uniqueID: 3973181875
     locked: 0
