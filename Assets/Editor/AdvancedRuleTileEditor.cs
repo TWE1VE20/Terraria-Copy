@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+
+#if UNITY_EDITOR
 
 namespace UnityEditor
 {
@@ -13,9 +12,9 @@ namespace UnityEditor
         public Texture2D specified;
         public Texture2D empty;
 
-        public override void RuleOnGUI(Rect rect, Vector3Int position,int neighbor)
+        public override void RuleOnGUI(Rect rect, Vector3Int position, int neighbor)
         {
-            switch(neighbor)
+            switch (neighbor)
             {
                 case 3:
                     GUI.DrawTexture(rect, any);
@@ -32,3 +31,4 @@ namespace UnityEditor
         }
     }
 }
+#endif
