@@ -75,6 +75,7 @@ public class SceneManager : MonoBehaviour
             Shade.color = new Color(Shade.color.r, Shade.color.g, Shade.color.b, alpha);
             yield return null;
         }
+        canvas.gameObject.SetActive(false);
     }
 
     private void Upadate()
